@@ -103,12 +103,35 @@ def _create_snake(new_map, size=5):
     min 2
     max 20
     :return:
+    0 if can add snake
     """
+    black_houses = __black_house_list(new_map)
     # choose a random dot in empty space of array
 
     # add tail
 
     pass
+
+
+def __black_house_list(new_map):
+    """
+    return list of black house's
+    :param new_map:
+     main_map
+    :return:
+     list of black house in normal array
+    """
+    addr_black = []  # list of black house
+    i_i = 0
+    # find all black house
+    for i in new_map:
+        j_j = 0
+        for j in i:
+            if j == 0:
+                addr_black.append([i_i, j_j])
+            j_j += 1
+        i_i += 1
+    return addr_black
 
 
 def _add_food(new_map, n=1):
@@ -123,25 +146,18 @@ def _add_food(new_map, n=1):
     0 if no problem
     1 if no space for add any more food
     """
-    addr_black = []
-    i_i = 0
-    for i in new_map:
-        j_j = 0
-        for j in i:
-            if j == 0:
-                addr_black.append([i_i, j_j])
-            j_j += 1
-        i_i += 1
+    black_house = __black_house_list(new_map)
 
-    if len(addr_black) == 0:
+    if len(black_house) == 0:
         return 1
 
+    # pick n ta random house and put it into rand_list
     rand_list = []
     for k in range(n):
-        rand_dot = random.randint(0, len(addr_black))
-        temp = addr_black[rand_dot]
+        rand_dot = random.randint(0, len(black_house))
+        temp = black_house[rand_dot]
         rand_list.append(temp)
-        del addr_black[rand_dot]
+        del black_house[rand_dot]
 
     for k in range(n):
         temp = rand_list.pop()
