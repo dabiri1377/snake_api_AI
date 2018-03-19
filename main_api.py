@@ -9,6 +9,14 @@ from STRING import *
 def req_main_map():
     """
     return main_map of game
+
+    # --- map RULE
+    # 0 = empty
+    # 1 = wall
+    # 2 = food
+    # 3 = snake head
+    # 4 = snake body
+
     :return:
      main_map array in numpy format
      -1 if game finished
@@ -43,39 +51,75 @@ def _update_movement():
     pass
 
 
-def _show_map():
-    # TODO: write this func
-    pass
+def _show_map(new_map, screen_obj):
+    """
+    draw map
+    :param new_map:
+     main_map in numpy format
+    :return:
+    """
+    # TODO: this is working but this dude is too slow, fix this with metode blow
+    # you just need to re draw pixels changes
+
+    i_i = 0
+    for i in new_map:
+        j_j = 0
+        for j in i:
+
+            color_of_rect = 0
+            if j == 0:
+                # set color_of_rect to black for blank space
+                color_of_rect = BLACK
+            elif j == 1:
+                # set color_of_rect to white for wall
+                color_of_rect = GRAY
+            elif j == 2:
+                # set color_of_rect to red for food
+                color_of_rect = RED
+            elif j == 3:
+                # set color_of_rect to blue for head of snake head
+                color_of_rect = BLUE
+            elif j == 4:
+                # set color_of_rect to light_blue for snake body
+                color_of_rect = LIGHT_BLUE
+
+            # Draw a rectangle in i_i,j_j
+
+            pygame.draw.rect(screen_obj, color_of_rect,
+                             [(i_i * 15), (j_j * 15), 13, 13], 0)
+
+            j_j += 1
+
+        i_i += 1
 
 
 # --- map RULE
 # 0 = empty
 # 1 = wall
 # 2 = food
-# 8 = snake head
-# 3 = snake body
+# 3 = snake head
+# 4 = snake body
 
 # set map size(-2 for walls)
-MAP_SIZE = 32
+_MAP_SIZE = 32
 # create a main map for snake
-main_map = np.zeros((MAP_SIZE, MAP_SIZE))
+main_map = np.zeros((_MAP_SIZE, _MAP_SIZE))
 # create map wall
 main_map[0, 0:] = 1
 main_map[0:, 0] = 1
-main_map[MAP_SIZE-1, 0:] = 1
-main_map[0:, MAP_SIZE-1] = 1
+main_map[_MAP_SIZE - 1, 0:] = 1
+main_map[0:, _MAP_SIZE - 1] = 1
 
 # game status flag.
 # if == True => game still playable
 # if == False => game is finished and snake dead
-game_status_flag = True
-
+_game_status_flag = True
 
 # Initialize the game engine
 pygame.init()
 
 # Set the height and width of the screen
-size = (500, 500)
+size = (800, 550)
 screen = pygame.display.set_mode(size)
 
 # set caption fow window
@@ -103,7 +147,7 @@ while not done:
     screen.fill(WHITE)
 
     # ------- DRAW CODE
-
+    _show_map(main_map, screen)
     # ------- FIN DRAW CODE
 
     # Go ahead and update the screen with what we've drawn.
