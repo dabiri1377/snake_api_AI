@@ -37,13 +37,13 @@ def move_snake(direction):
     pass
 
 
-def update_movement():
+def _update_movement():
     # update movement of user into map and return result
     # TODO: write this func
     pass
 
 
-def show_map():
+def _show_map():
     # TODO: write this func
     pass
 
