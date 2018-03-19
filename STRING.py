@@ -6,6 +6,8 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 LIGHT_BLUE = (0, 102, 255)
+GRAY = (166, 166, 166)
+
 
 # set PI value
 PI = math.pi
