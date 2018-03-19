@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 # Import a library of functions called 'pygame'
 import pygame
 
@@ -93,6 +93,63 @@ def _show_map(new_map, screen_obj):
         i_i += 1
 
 
+def _create_snake(new_map, size=5):
+    """
+    create a random snake in the main_map
+    :param new_map:
+     main_map
+    :param size:
+    length of snake
+    min 2
+    max 20
+    :return:
+    """
+    # choose a random dot in empty space of array
+
+    # add tail
+
+    pass
+
+
+def _add_food(new_map, n=1):
+    """
+    add n food in empty space of map
+    :param new_map:
+     main_map
+    :param n:
+     number of food
+     default = 1
+    :return:
+    0 if no problem
+    1 if no space for add any more food
+    """
+    addr_black = []
+    i_i = 0
+    for i in new_map:
+        j_j = 0
+        for j in i:
+            if j == 0:
+                addr_black.append([i_i, j_j])
+            j_j += 1
+        i_i += 1
+
+    if len(addr_black) == 0:
+        return 1
+
+    rand_list = []
+    for k in range(n):
+        rand_dot = random.randint(0, len(addr_black))
+        temp = addr_black[rand_dot]
+        rand_list.append(temp)
+        del addr_black[rand_dot]
+
+    for k in range(n):
+        temp = rand_list.pop()
+        new_map[temp[0], temp[1]] = 2
+
+    return 0
+
+
 # --- map RULE
 # 0 = empty
 # 1 = wall
@@ -101,7 +158,7 @@ def _show_map(new_map, screen_obj):
 # 4 = snake body
 
 # set map size(-2 for walls)
-_MAP_SIZE = 32
+_MAP_SIZE = 10
 # create a main map for snake
 main_map = np.zeros((_MAP_SIZE, _MAP_SIZE))
 # create map wall
@@ -156,7 +213,7 @@ while not done:
 
     # This limits the while loop to a max of 60 times per second.
     # Leave this out and we will use all CPU we can.
-    clock.tick(60)
+    clock.tick(1)
 
 # close and showdown game engine
 pygame.quit()
