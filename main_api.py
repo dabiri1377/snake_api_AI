@@ -7,13 +7,43 @@ from STRING import *
 
 
 def req_main_map():
-    # send main map array
+    """
+    return main_map of game
+    :return:
+     main_map array in numpy format
+     -1 if game finished
+    """
     # TODO: write this func
     pass
 
 
-def move_snake():
-    # TODO: write brief help
+def move_snake(direction):
+    """
+    get direction and move the head of snake
+    and report problem
+    :param direction:
+    'up' for up
+    'down' for down
+    'left' for left
+    'right' for right
+    :return:
+    'ok' => if no problem to move snake
+    'dead-wall' => if snake crash into wall
+    'dead-body' => if snake crash into the body
+    'dead-win' => if map is full
+    'dead' => snake died, but i can't( or don't want to) figure out
+    """
+    # TODO: write this func
+    pass
+
+
+def update_movement():
+    # update movement of user into map and return result
+    # TODO: write this func
+    pass
+
+
+def show_map():
     # TODO: write this func
     pass
 
@@ -35,9 +65,10 @@ main_map[0:, 0] = 1
 main_map[MAP_SIZE-1, 0:] = 1
 main_map[0:, MAP_SIZE-1] = 1
 
-# for_debug
-print(main_map)
-
+# game status flag.
+# if == True => game still playable
+# if == False => game is finished and snake dead
+game_status_flag = True
 
 
 # Initialize the game engine
