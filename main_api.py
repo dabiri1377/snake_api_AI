@@ -1,18 +1,54 @@
+import numpy as np
+
 # Import a library of functions called 'pygame'
 import pygame
 
 from STRING import *
 
+
+def req_main_map():
+    # send main map array
+    # TODO: write this func
+    pass
+
+
+def move_snake():
+    # TODO: write brief help
+    # TODO: write this func
+    pass
+
+
+# --- map RULE
+# 0 = empty
+# 1 = wall
+# 2 = food
+# 8 = snake head
+# 3 = snake body
+
+# set map size(-2 for walls)
+MAP_SIZE = 32
+# create a main map for snake
+main_map = np.zeros((MAP_SIZE, MAP_SIZE))
+# create map wall
+main_map[0, 0:] = 1
+main_map[0:, 0] = 1
+main_map[MAP_SIZE-1, 0:] = 1
+main_map[0:, MAP_SIZE-1] = 1
+
+# for_debug
+print(main_map)
+
+
+
 # Initialize the game engine
 pygame.init()
-
 
 # Set the height and width of the screen
 size = (500, 500)
 screen = pygame.display.set_mode(size)
 
 # set caption fow window
-pygame.display.set_caption("Professor Craven's Cool Game")
+pygame.display.set_caption("Snake AI")
 
 # var for Loop until the user clicks the close button.
 done = False
