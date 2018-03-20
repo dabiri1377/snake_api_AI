@@ -1,5 +1,6 @@
 import numpy as np
 import random
+
 # Import a library of functions called 'Pygame'
 import pygame
 
@@ -15,11 +16,10 @@ class SnakeGame:
         self._screen = None
         self._screen_size = None
 
-        # game status flag.
-        # if == 1 => game still playable
-        # if == 0 => game is finished and snake dead
-        # if == -1 => game not began yet
         self._game_status_flag = -1
+        """if == 1 => game still playable, 
+        if == 0 => game is finished and snake dead, 
+        if == -1 => game not began yet    """
 
         # Initialize the game engine
         pygame.init()
@@ -31,6 +31,7 @@ class SnakeGame:
 
         pass
 
+    # Done
     def req_main_map(self):
         """
         return main_map of game
@@ -44,12 +45,15 @@ class SnakeGame:
 
         :return:
          main_map array in numpy format
-         -1 if game finished
+         -2 if game finished
+         -1 if game not began yet
         """
-        # TODO: write this func
-        # cheack game not finished yet
-
-        return self._main_map
+        if self._game_status_flag == 1:
+            return self._main_map
+        elif self._game_status_flag == -1:
+            return -1
+        elif self._game_status_flag == 1:
+            return -2
 
     def move_snake(self, direction):
         """
