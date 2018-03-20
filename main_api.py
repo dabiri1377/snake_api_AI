@@ -7,7 +7,7 @@ from STRING import *
 
 
 class SnakeGame:
-    def __init__(self, map_size):
+    def __init__(self, map_size=20):
 
         # create a main map for snake
         self._main_map = self._create_map(map_size)
@@ -284,3 +284,7 @@ class SnakeGame:
         temp_main_map[0:, map_size - 1] = 1
 
         return temp_main_map
+
+
+test = SnakeGame()
+test.start_game()
