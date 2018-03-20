@@ -8,7 +8,7 @@ from STRING import *
 
 
 class SnakeGame:
-    def __init__(self, map_size=20, s_size=10):
+    def __init__(self, map_size=20, s_size=5):
         """
 
         :param map_size:
@@ -30,6 +30,9 @@ class SnakeGame:
         """if == 1 => game still playable, 
         if == 0 => game is finished and snake dead, 
         if == -1 => game not began yet    """
+
+        self._snake_head = None
+        "position of head of snake"
 
         self._snake_size = s_size
         "size of snake"
@@ -188,7 +191,7 @@ class SnakeGame:
                 # Draw a rectangle in i_i,j_j
 
                 pygame.draw.rect(self._screen, color_of_rect,
-                                 [(i_i * 15), (j_j * 15), 13, 13], 0)
+                                 [(j_j * 15), (i_i * 15), 13, 13], 0)
 
                 j_j += 1
 
@@ -197,11 +200,12 @@ class SnakeGame:
     def _create_snake(self, size=5):
         """
         create a random snake in the main_map
-
+        (this func not working well. but develop later)
         :param size:
         length of snake
         min 2
         max 20
+        (now its just 5 )
         :return:
         0 => snake added
         'NoSpace' => not enough space for create snake
@@ -217,10 +221,8 @@ class SnakeGame:
         if size < 2 or size > 20:
             return 'inValLen'
 
-        # choose a random dot in empty space of array
-
-        # add tail
-
+        self._main_map[1, 2:6] = 4
+        self._main_map[1, 6] = 3
         pass
 
     # Done
@@ -246,7 +248,7 @@ class SnakeGame:
         return addr_black
 
     # Done
-    def _add_food(self,  n=1):
+    def _add_food(self, n=1):
         """
         add n food in empty space of map
 
@@ -292,6 +294,8 @@ class SnakeGame:
 
         :param map_size:
         size of map(n x n)
+        min = 7
+        max = 32
         :return:
          matrix of map in numpy form
         """
@@ -308,4 +312,4 @@ class SnakeGame:
 
 
 test = SnakeGame()
-test.start_game()
+test.start_game((800, 500), 2)
