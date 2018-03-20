@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import time
 
 # Import a library of functions called 'Pygame'
 import pygame
@@ -27,15 +28,22 @@ class SnakeGame:
         "size of screen in pixel"
 
         self._game_status_flag = -1
-        """if == 1 => game still playable, 
-        if == 0 => game is finished and snake dead, 
-        if == -1 => game not began yet    """
+        "if == 1 => game still playable, "
+        "if == 0 => game is finished and snake dead, "
+        "if == -1 => game not began yet    "
 
         self._snake_head = None
         "position of head of snake"
 
+        self._snake = []
+        """"list of all snake body part, in order
+        (snake[0] = head of snake) """
+
         self._snake_size = s_size
         "size of snake"
+
+        self._snake_score = None
+        "length added to snake for eating food"
 
         # Initialize the game engine
         pygame.init()
@@ -90,8 +98,48 @@ class SnakeGame:
         'dead-body' => if snake crash into the body
         'dead-win' => if map is full
         'dead' => snake died, but i can't( or don't want to) figure out
+        1 => some other thing is wrong
         """
         # TODO: write this func
+
+        self._snake_head = self._snake[0]
+        snake_head_i = self._snake_head[0]
+        snake_head_j = self._snake_head[1]
+
+        if direction == 'up':
+            next_block = [snake_head_i, snake_head_j - 1]
+        elif direction == 'down':
+            next_block = [snake_head_i, snake_head_j + 1]
+        elif direction == 'left':
+            next_block = [snake_head_i + 1, snake_head_j]
+        elif direction == 'right':
+            next_block = [snake_head_i - 1, snake_head_j]
+        else:
+            return 1
+
+        if self._main_map[next_block[0], next_block[1]] == 1:
+            # crash to wall
+            self._game_status_flag = 0
+
+        elif self._main_map[next_block[0], next_block[1]] == 2:
+            # snake eat food
+            pass
+        elif self._main_map[next_block[0], next_block[1]] == 0:
+            # snake just move
+            self._snake.insert(0,next_block)
+            self._put_snake_in_map()
+            pass
+        elif self._main_map[next_block[0], next_block[1]] == 4:
+            # crash to itself
+            pass
+        elif self._main_map[next_block[0], next_block[1]] == 3:
+            # crash into his head?!!
+            print("WFT? How?")
+            return 1
+        else:
+            print("WTF?!!")
+            return 1
+
         pass
 
     def start_game(self, screen_size=(800, 550), game_fps=20, game_name="Snake AI"):
@@ -139,7 +187,9 @@ class SnakeGame:
             self._screen.fill(WHITE)
 
             # ------- DRAW CODE
+            # TODO: put this somewhere good
             self._show_map()
+
             # ------- FIN DRAW CODE
 
             # Go ahead and update the screen with what we've drawn.
@@ -197,6 +247,7 @@ class SnakeGame:
 
             i_i += 1
 
+    # need to work on
     def _create_snake(self, size=5):
         """
         create a random snake in the main_map
@@ -221,10 +272,20 @@ class SnakeGame:
         if size < 2 or size > 20:
             return 'inValLen'
 
-        self._main_map[1, 2:6] = 4
-        self._main_map[1, 6] = 3
-        self._snake_head = (1, 6)
+        # for now size is 5 and position  is fixed
+        # TODO: fix later
+        self._snake = [[1, 6], [1, 5], [1, 4], [1, 3]]
+
+        # put new snake in map
+        self._put_snake_in_map()
         return 0
+
+    # TODO: add some fucking command for this
+    # TODO: fix this
+    def _put_snake_in_map(self):
+        self._main_map[self._snake[0][0], self._snake[0][1]] = 3
+        for x in range(1, len(self._snake)):
+            self._main_map[self._snake[x][0], self._snake[x][1]] = 4
 
     # Done
     @staticmethod
@@ -313,4 +374,9 @@ class SnakeGame:
 
 
 test = SnakeGame()
+print("test0")
 test.start_game((800, 500), 2)
+print("test1")
+time.sleep(1)
+print("test2")
+test.move_snake('down')
