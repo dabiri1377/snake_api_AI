@@ -54,7 +54,7 @@ class SnakeGame:
         self._create_snake(s_size)
 
         # add a food into map
-        self._add_food()
+        self._add_food(1)
 
         pass
 
@@ -178,7 +178,7 @@ class SnakeGame:
 
         pass
 
-    def start_game(self, screen_size=(800, 550), game_name="Snake AI"):
+    def start_game(self, screen_size=(700, 490), game_name="Snake AI"):
         """
 
         :param screen_size:
@@ -205,18 +205,35 @@ class SnakeGame:
 
     def _update_screen(self):
         # update movement of user into map and return result
-        # TODO: write this func
+
+        # clear screen
         self._screen.fill(WHITE)
 
         # ------- DRAW CODE
-        # TODO: put this somewhere good
+
+        # show maze_map
         self._show_map()
+
+        # show score
+        self._show_score()
 
         # ------- FIN DRAW CODE
 
-        # Go ahead and update the screen with what we've drawn.
-        # This MUST happen after all the other drawing commands.
+        # update the screen with what we've drawn.
         pygame.display.flip()
+
+        pass
+
+    def _show_score(self):
+        pygame.draw.line(self._screen, BLACK, [490, 0], [490, 490], 3)
+
+        font = pygame.font.SysFont('Calibri', 30, False, False)
+
+        text_string = "Score =" + str(self._snake_score)
+        text = font.render(text_string, True, BLACK)
+
+        self._screen.blit(text, [500, 10])
+
         pass
 
     # Done
@@ -225,7 +242,7 @@ class SnakeGame:
         draw map
         :return:
         """
-        # TODO: this is working but this dude is too slow, fix this with metode blow
+        # TODO: this is working but this dude is too slow, fix this with method blow
         # you just need to re draw pixels changes
 
         i_i = 0
@@ -373,7 +390,7 @@ class SnakeGame:
         # pick n ta random house and put it into rand_list
         rand_list = []
         for k in range(n):
-            rand_dot = random.randint(0, len(black_house))
+            rand_dot = random.randint(0, len(black_house)-1)
             temp = black_house[rand_dot]
             rand_list.append(temp)
             del black_house[rand_dot]
@@ -405,6 +422,8 @@ class SnakeGame:
         :return:
          matrix of map in numpy form
         """
+        if map_size > 32:
+            raise ImportError()
 
         # create a main map for snake
         temp_main_map = np.zeros((map_size, map_size))
@@ -417,7 +436,7 @@ class SnakeGame:
         return temp_main_map
 
 
-test = SnakeGame()
+test = SnakeGame(32)
 print("test0")
 test.start_game()
 # while test.done():
@@ -438,4 +457,3 @@ for _ in range(5):
 for _ in range(5):
     time.sleep(0.2)
     test.move_snake('right')
-
