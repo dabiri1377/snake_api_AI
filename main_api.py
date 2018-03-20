@@ -8,13 +8,23 @@ from STRING import *
 
 
 class SnakeGame:
-    def __init__(self, map_size=20):
+    def __init__(self, map_size=20, s_size=10):
+        """
 
+        :param map_size:
+         size of map in block's
+        :param s_size:
+         size of snake
+        """
         # create a main map for snake
         self._main_map = self._create_map(map_size)
+        "main map of game in numpy ndarray format"
 
         self._screen = None
+        "obj of screen"
+
         self._screen_size = None
+        "size of screen in pixel"
 
         self._game_status_flag = -1
         """if == 1 => game still playable, 
@@ -23,6 +33,10 @@ class SnakeGame:
 
         # Initialize the game engine
         pygame.init()
+
+        # create a snake in the map
+        self._create_snake()
+
         pass
 
     def __del__(self):
