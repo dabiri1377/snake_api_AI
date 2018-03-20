@@ -31,11 +31,14 @@ class SnakeGame:
         if == 0 => game is finished and snake dead, 
         if == -1 => game not began yet    """
 
+        self._snake_size = s_size
+        "size of snake"
+
         # Initialize the game engine
         pygame.init()
 
         # create a snake in the map
-        self._create_snake()
+        self._create_snake(s_size)
 
         pass
 
