@@ -88,7 +88,8 @@ class SnakeGame:
         elif self._game_status_flag == 1:
             return -2
 
-    def done(self):
+    @staticmethod
+    def done():
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
                 return False
