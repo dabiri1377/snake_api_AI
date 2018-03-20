@@ -28,9 +28,14 @@ class SnakeGame:
         "size of screen in pixel"
 
         self._game_status_flag = -1
-        "if == 1 => game still playable, "
-        "if == 0 => game is finished and snake dead, "
-        "if == -1 => game not began yet    "
+        """if == 1 => game still playable, 
+        if == 0 => game is finished and snake dead, 
+        if == -1 => game not began yet    
+        if == 2 you win!!
+        """
+
+        self._game_win_flag_2 = 0
+        "if == True => you won the game"
 
         self._snake_head = None
         "position of head of snake"
@@ -80,14 +85,17 @@ class SnakeGame:
          main_map array in numpy format
          -2 if game finished
          -1 if game not began yet
+         -3 if you win
         """
+        if self._game_win_flag_2 == 1:
+            return -3
+
         if self._game_status_flag == 1:
             return self._main_map
         elif self._game_status_flag == -1:
             return -1
-        elif self._game_status_flag == 1:
+        elif self._game_status_flag == 0:
             return -2
-
     @staticmethod
     def done():
         for event in pygame.event.get():  # User did something
@@ -147,6 +155,7 @@ class SnakeGame:
             self._snake_score += 1
             if len(self.__food_house_list()) == 0 \
                     and len(self.__black_house_list()) == 0:
+                self._game_win_flag_2 = 1
                 return 'dead-win'
             else:
                 return 'ok'
@@ -159,6 +168,7 @@ class SnakeGame:
             self._update_screen()
             if len(self.__food_house_list()) == 0 \
                     and len(self.__black_house_list()) == 0:
+                self._game_win_flag_2 = 1
                 return 'dead-win'
             else:
                 return 'ok'
@@ -234,7 +244,18 @@ class SnakeGame:
 
         self._screen.blit(text, [500, 10])
 
+        if self._game_win_flag_2 == 1:
+            # you win
+            text = font.render("You win!!!", True, GREEN)
+            self._screen.blit(text, [500, 50])
+        elif self._game_status_flag == 0:
+            # you lose
+            text = font.render("You lose!!!", True, RED)
+            self._screen.blit(text, [500, 100])
+            pass
+
         pass
+
 
     # Done
     def _show_map(self):
@@ -446,7 +467,7 @@ for _ in range(10):
     time.sleep(0.2)
     test.move_snake('down')
 
-for _ in range(5):
+for _ in range(10):
     time.sleep(0.2)
     test.move_snake('left')
 
