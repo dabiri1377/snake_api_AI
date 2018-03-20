@@ -136,9 +136,9 @@ class SnakeGame:
         elif direction == 'down':
             next_block = [snake_head_i + 1, snake_head_j]
         elif direction == 'left':
-            next_block = [snake_head_i, snake_head_j + 1]
-        elif direction == 'right':
             next_block = [snake_head_i, snake_head_j - 1]
+        elif direction == 'right':
+            next_block = [snake_head_i, snake_head_j + 1]
         else:
             return 1
 
