@@ -96,6 +96,7 @@ class SnakeGame:
             return -1
         elif self._game_status_flag == 0:
             return -2
+
     @staticmethod
     def done():
         for event in pygame.event.get():  # User did something
@@ -122,7 +123,6 @@ class SnakeGame:
         'died' => game is already finished
         1 => some other thing is wrong
         """
-        # TODO: write this func
         # game already finished
         if self._game_status_flag == 0:
             return 'died'
@@ -145,6 +145,7 @@ class SnakeGame:
         if self._main_map[next_block[0], next_block[1]] == 1:
             # crash to wall
             self._game_status_flag = 0
+            self._update_screen()
             return 'dead-wall'
 
         elif self._main_map[next_block[0], next_block[1]] == 2:
@@ -176,8 +177,8 @@ class SnakeGame:
         elif self._main_map[next_block[0], next_block[1]] == 4:
             # crash to itself
             self._game_status_flag = 0
+            self._update_screen()
             return 'dead-body'
-            pass
         elif self._main_map[next_block[0], next_block[1]] == 3:
             # crash into his head?!!
             print("WFT? How?")
@@ -185,8 +186,6 @@ class SnakeGame:
         else:
             print("WTF?!!")
             return 1
-
-        pass
 
     def start_game(self, screen_size=(700, 490), game_name="Snake AI"):
         """
@@ -255,7 +254,6 @@ class SnakeGame:
             pass
 
         pass
-
 
     # Done
     def _show_map(self):
