@@ -453,26 +453,3 @@ class SnakeGame:
         temp_main_map[0:, map_size - 1] = 1
 
         return temp_main_map
-
-
-test = SnakeGame(32)
-print("test0")
-test.start_game()
-# while test.done():
-#    time.sleep(0.2)
-#   test.move_snake('down')
-for _ in range(10):
-    time.sleep(0.2)
-    test.move_snake('down')
-
-for _ in range(10):
-    time.sleep(0.2)
-    test.move_snake('left')
-
-for _ in range(5):
-    time.sleep(0.2)
-    test.move_snake('up')
-
-for _ in range(5):
-    time.sleep(0.2)
-    test.move_snake('right')
