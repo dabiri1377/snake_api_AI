@@ -170,7 +170,7 @@ def _add_food(new_map, n=1):
 
 
 # Done
-def create_map(map_size=15):
+def _create_map(map_size=15):
     """
     create a (map_size x map_size) map
     set wall and return it
@@ -200,7 +200,7 @@ def create_map(map_size=15):
 
 
 # create a main map for snake
-main_map = create_map(10)
+main_map = _create_map(10)
 
 # game status flag.
 # if == True => game still playable
