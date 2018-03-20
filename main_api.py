@@ -42,14 +42,19 @@ class SnakeGame:
         self._snake_size = s_size
         "size of snake"
 
-        self._snake_score = None
+        self._snake_score = 0
         "length added to snake for eating food"
+
+        self._map_size = map_size
 
         # Initialize the game engine
         pygame.init()
 
         # create a snake in the map
         self._create_snake(s_size)
+
+        # add a food into map
+        self._add_food()
 
         pass
 
@@ -83,6 +88,13 @@ class SnakeGame:
         elif self._game_status_flag == 1:
             return -2
 
+    def done(self):
+        for event in pygame.event.get():  # User did something
+            if event.type == pygame.QUIT:  # If user clicked close
+                return False
+
+        return True
+
     def move_snake(self, direction):
         """
         get direction and move the head of snake
@@ -98,9 +110,13 @@ class SnakeGame:
         'dead-body' => if snake crash into the body
         'dead-win' => if map is full
         'dead' => snake died, but i can't( or don't want to) figure out
+        'died' => game is already finished
         1 => some other thing is wrong
         """
         # TODO: write this func
+        # game already finished
+        if self._game_status_flag == 0:
+            return 'died'
 
         self._snake_head = self._snake[0]
         snake_head_i = self._snake_head[0]
@@ -120,17 +136,36 @@ class SnakeGame:
         if self._main_map[next_block[0], next_block[1]] == 1:
             # crash to wall
             self._game_status_flag = 0
+            return 'dead-wall'
 
         elif self._main_map[next_block[0], next_block[1]] == 2:
             # snake eat food
-            pass
+            self._snake.insert(0, next_block)
+            self._put_snake_in_map()
+            self._update_screen()
+            self._snake_score += 1
+            if len(self.__food_house_list()) == 0 \
+                    and len(self.__black_house_list()) == 0:
+                return 'dead-win'
+            else:
+                return 'ok'
+
         elif self._main_map[next_block[0], next_block[1]] == 0:
             # snake just move
-            self._snake.insert(0,next_block)
+            self._snake.insert(0, next_block)
+            self._snake = self._snake[:-1]
             self._put_snake_in_map()
-            pass
+            self._update_screen()
+            if len(self.__food_house_list()) == 0 \
+                    and len(self.__black_house_list()) == 0:
+                return 'dead-win'
+            else:
+                return 'ok'
+
         elif self._main_map[next_block[0], next_block[1]] == 4:
             # crash to itself
+            self._game_status_flag = 0
+            return 'dead-body'
             pass
         elif self._main_map[next_block[0], next_block[1]] == 3:
             # crash into his head?!!
@@ -142,13 +177,12 @@ class SnakeGame:
 
         pass
 
-    def start_game(self, screen_size=(800, 550), game_fps=20, game_name="Snake AI"):
+    def start_game(self, screen_size=(800, 550), game_name="Snake AI"):
         """
 
         :param screen_size:
          size of screen in pixel
-        :param game_fps:
-        fps of this game
+
         :param game_name:
          name show in top of window
         :return:
@@ -164,47 +198,24 @@ class SnakeGame:
 
         # set caption fow window
         pygame.display.set_caption(game_name)
-
-        # var for Loop until the user clicks the close button.
-        done = False
-
-        # define obj for frame rate
-        clock = pygame.time.Clock()
-
-        # Loop as long as done == False
-        while not done:
-
-            for event in pygame.event.get():  # User did something
-                if event.type == pygame.QUIT:  # If user clicked close
-                    done = True  # Flag that we are done so we exit this loop
-
-            # --- Game logic should go here
-
-            # All drawing code happens after the for loop and but
-            # inside the main while not done loop.
-
-            # Clear the screen and set the screen background
-            self._screen.fill(WHITE)
-
-            # ------- DRAW CODE
-            # TODO: put this somewhere good
-            self._show_map()
-
-            # ------- FIN DRAW CODE
-
-            # Go ahead and update the screen with what we've drawn.
-            # This MUST happen after all the other drawing commands.
-            pygame.display.flip()
-
-            # This limits the while loop to a max of 60 times per second.
-            # Leave this out and we will use all CPU we can.
-            clock.tick(game_fps)
+        self._update_screen()
 
         pass
 
-    def _update_movement(self, ):
+    def _update_screen(self):
         # update movement of user into map and return result
         # TODO: write this func
+        self._screen.fill(WHITE)
+
+        # ------- DRAW CODE
+        # TODO: put this somewhere good
+        self._show_map()
+
+        # ------- FIN DRAW CODE
+
+        # Go ahead and update the screen with what we've drawn.
+        # This MUST happen after all the other drawing commands.
+        pygame.display.flip()
         pass
 
     # Done
@@ -262,7 +273,7 @@ class SnakeGame:
         'NoSpace' => not enough space for create snake
         'inValLen' => invalid length of snake
         """
-        black_houses = self.__black_house_list(self._main_map)
+        black_houses = self.__black_house_list()
         # check for space for create snake
         if len(black_houses) <= size:
             # NO space for create snake
@@ -283,24 +294,37 @@ class SnakeGame:
     # TODO: add some fucking command for this
     # TODO: fix this
     def _put_snake_in_map(self):
+        food_list = self.__food_house_list()
+
+        # clear main map
+        # create a main map for snake
+        self._main_map = np.zeros((self._map_size, self._map_size))
+        # create map wall
+        self._main_map[0, 0:] = 1
+        self._main_map[0:, 0] = 1
+        self._main_map[self._map_size - 1, 0:] = 1
+        self._main_map[0:, self._map_size - 1] = 1
+
+        # put back food into map
+        for x in range(0, len(food_list)):
+            self._main_map[food_list[x][0], food_list[x][1]] = 2
+
+        # put snake into map
         self._main_map[self._snake[0][0], self._snake[0][1]] = 3
         for x in range(1, len(self._snake)):
             self._main_map[self._snake[x][0], self._snake[x][1]] = 4
 
-    # Done
-    @staticmethod
-    def __black_house_list(new_map):
+    def __black_house_list(self):
         """
         return list of black house's
-        :param new_map:
-         main_map
+
         :return:
          list of black house in normal array
         """
         addr_black = []  # list of black house
         i_i = 0
         # find all black house
-        for i in new_map:
+        for i in self._main_map:
             j_j = 0
             for j in i:
                 if j == 0:
@@ -308,6 +332,25 @@ class SnakeGame:
                 j_j += 1
             i_i += 1
         return addr_black
+
+    def __food_house_list(self):
+        """
+        return list of food house's
+
+        :return:
+         list of food house in normal array
+        """
+        addr_food = []  # list of black house
+        i_i = 0
+        # find all black house
+        for i in self._main_map:
+            j_j = 0
+            for j in i:
+                if j == 2:
+                    addr_food.append([i_i, j_j])
+                j_j += 1
+            i_i += 1
+        return addr_food
 
     # Done
     def _add_food(self, n=1):
@@ -321,7 +364,7 @@ class SnakeGame:
         0 if no problem
         1 if no space for add any more food
         """
-        black_house = self.__black_house_list(self._main_map)
+        black_house = self.__black_house_list()
 
         if len(black_house) == 0:
             return 1
@@ -375,8 +418,8 @@ class SnakeGame:
 
 test = SnakeGame()
 print("test0")
-test.start_game((800, 500), 2)
-print("test1")
-time.sleep(1)
-print("test2")
-test.move_snake('down')
+test.start_game()
+while test.done():
+    time.sleep(0.2)
+
+    test.move_snake('down')
