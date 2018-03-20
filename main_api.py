@@ -1,6 +1,6 @@
 import numpy as np
 import random
-# Import a library of functions called 'pygame'
+# Import a library of functions called 'Pygame'
 import pygame
 
 from STRING import *
@@ -18,7 +18,7 @@ class SnakeGame:
         # game status flag.
         # if == 1 => game still playable
         # if == 0 => game is finished and snake dead
-        # if == -1 => game not begined yet
+        # if == -1 => game not began yet
         self._game_status_flag = -1
 
         # Initialize the game engine
@@ -70,8 +70,18 @@ class SnakeGame:
         # TODO: write this func
         pass
 
-    def start_game(self, screen_size=(800, 550)):
-        # change game status
+    def start_game(self, screen_size=(800, 550), game_fps=20, game_name="Snake AI"):
+        """
+
+        :param screen_size:
+         size of screen in pixel
+        :param game_fps:
+        fps of this game
+        :param game_name:
+         name show in top of window
+        :return:
+        """
+        # Change game status
         self._game_status_flag = 1
 
         # Set the height and width of the screen
@@ -81,7 +91,7 @@ class SnakeGame:
         self._screen = pygame.display.set_mode(self._screen_size)
 
         # set caption fow window
-        pygame.display.set_caption("Snake AI")
+        pygame.display.set_caption(game_name)
 
         # var for Loop until the user clicks the close button.
         done = False
@@ -105,7 +115,7 @@ class SnakeGame:
             self._screen.fill(WHITE)
 
             # ------- DRAW CODE
-            self._show_map(self._main_map, self._screen)
+            self._show_map()
             # ------- FIN DRAW CODE
 
             # Go ahead and update the screen with what we've drawn.
@@ -114,7 +124,7 @@ class SnakeGame:
 
             # This limits the while loop to a max of 60 times per second.
             # Leave this out and we will use all CPU we can.
-            clock.tick(1)
+            clock.tick(game_fps)
 
         pass
 
@@ -124,18 +134,16 @@ class SnakeGame:
         pass
 
     # Done
-    def _show_map(self, new_map, screen_obj):
+    def _show_map(self):
         """
         draw map
-        :param new_map:
-         main_map in numpy format
         :return:
         """
         # TODO: this is working but this dude is too slow, fix this with metode blow
         # you just need to re draw pixels changes
 
         i_i = 0
-        for i in new_map:
+        for i in self._main_map:
             j_j = 0
             for j in i:
 
@@ -158,18 +166,17 @@ class SnakeGame:
 
                 # Draw a rectangle in i_i,j_j
 
-                pygame.draw.rect(screen_obj, color_of_rect,
+                pygame.draw.rect(self._screen, color_of_rect,
                                  [(i_i * 15), (j_j * 15), 13, 13], 0)
 
                 j_j += 1
 
             i_i += 1
 
-    def _create_snake(self, new_map, size=5):
+    def _create_snake(self, size=5):
         """
         create a random snake in the main_map
-        :param new_map:
-         main_map
+
         :param size:
         length of snake
         min 2
@@ -177,11 +184,18 @@ class SnakeGame:
         :return:
         0 => snake added
         'NoSpace' => not enough space for create snake
+        'inValLen' => invalid length of snake
         """
-        black_houses = self.__black_house_list(new_map)
-        if black_houses <= size:
+        black_houses = self.__black_house_list(self._main_map)
+        # check for space for create snake
+        if len(black_houses) <= size:
             # NO space for create snake
             return 'NoSpace'
+
+        # check len of snake
+        if size < 2 or size > 20:
+            return 'inValLen'
+
         # choose a random dot in empty space of array
 
         # add tail
@@ -189,7 +203,8 @@ class SnakeGame:
         pass
 
     # Done
-    def __black_house_list(self, new_map):
+    @staticmethod
+    def __black_house_list(new_map):
         """
         return list of black house's
         :param new_map:
@@ -210,11 +225,10 @@ class SnakeGame:
         return addr_black
 
     # Done
-    def _add_food(self, new_map, n=1):
+    def _add_food(self,  n=1):
         """
         add n food in empty space of map
-        :param new_map:
-         main_map
+
         :param n:
          number of food
          default = 1
@@ -222,7 +236,7 @@ class SnakeGame:
         0 if no problem
         1 if no space for add any more food
         """
-        black_house = self.__black_house_list(new_map)
+        black_house = self.__black_house_list(self._main_map)
 
         if len(black_house) == 0:
             return 1
@@ -237,12 +251,13 @@ class SnakeGame:
 
         for k in range(n):
             temp = rand_list.pop()
-            new_map[temp[0], temp[1]] = 2
+            self._main_map[temp[0], temp[1]] = 2
 
         return 0
 
     # Done
-    def _create_map(self, map_size=15):
+    @staticmethod
+    def _create_map(map_size=15):
         """
         create a (map_size x map_size) map
         set wall and return it
@@ -269,4 +284,3 @@ class SnakeGame:
         temp_main_map[0:, map_size - 1] = 1
 
         return temp_main_map
-
