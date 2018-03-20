@@ -223,7 +223,8 @@ class SnakeGame:
 
         self._main_map[1, 2:6] = 4
         self._main_map[1, 6] = 3
-        pass
+        self._snake_head = (1, 6)
+        return 0
 
     # Done
     @staticmethod
