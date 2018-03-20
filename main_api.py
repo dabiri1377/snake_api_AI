@@ -51,6 +51,7 @@ def _update_movement():
     pass
 
 
+# Done
 def _show_map(new_map, screen_obj):
     """
     draw map
@@ -113,6 +114,7 @@ def _create_snake(new_map, size=5):
     pass
 
 
+# Done
 def __black_house_list(new_map):
     """
     return list of black house's
@@ -134,6 +136,7 @@ def __black_house_list(new_map):
     return addr_black
 
 
+# Done
 def _add_food(new_map, n=1):
     """
     add n food in empty space of map
@@ -166,22 +169,38 @@ def _add_food(new_map, n=1):
     return 0
 
 
-# --- map RULE
-# 0 = empty
-# 1 = wall
-# 2 = food
-# 3 = snake head
-# 4 = snake body
+# Done
+def create_map(map_size=15):
+    """
+    create a (map_size x map_size) map
+    set wall and return it
 
-# set map size(-2 for walls)
-_MAP_SIZE = 10
+    # --- map RULE
+    # 0 = empty
+    # 1 = wall
+    # 2 = food
+    # 3 = snake head
+    # 4 = snake body
+
+    :param map_size:
+    size of map(n x n)
+    :return:
+     matrix of map in numpy form
+    """
+
+    # create a main map for snake
+    temp_main_map = np.zeros((map_size, map_size))
+    # create map wall
+    temp_main_map[0, 0:] = 1
+    temp_main_map[0:, 0] = 1
+    temp_main_map[map_size - 1, 0:] = 1
+    temp_main_map[0:, map_size - 1] = 1
+
+    return temp_main_map
+
+
 # create a main map for snake
-main_map = np.zeros((_MAP_SIZE, _MAP_SIZE))
-# create map wall
-main_map[0, 0:] = 1
-main_map[0:, 0] = 1
-main_map[_MAP_SIZE - 1, 0:] = 1
-main_map[0:, _MAP_SIZE - 1] = 1
+main_map = create_map(10)
 
 # game status flag.
 # if == True => game still playable
