@@ -123,13 +123,13 @@ class SnakeGame:
         snake_head_j = self._snake_head[1]
 
         if direction == 'up':
-            next_block = [snake_head_i, snake_head_j - 1]
-        elif direction == 'down':
-            next_block = [snake_head_i, snake_head_j + 1]
-        elif direction == 'left':
-            next_block = [snake_head_i + 1, snake_head_j]
-        elif direction == 'right':
             next_block = [snake_head_i - 1, snake_head_j]
+        elif direction == 'down':
+            next_block = [snake_head_i + 1, snake_head_j]
+        elif direction == 'left':
+            next_block = [snake_head_i, snake_head_j + 1]
+        elif direction == 'right':
+            next_block = [snake_head_i, snake_head_j - 1]
         else:
             return 1
 
