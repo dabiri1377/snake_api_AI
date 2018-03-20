@@ -6,249 +6,267 @@ import pygame
 from STRING import *
 
 
-def req_main_map():
-    """
-    return main_map of game
+class SnakeGame:
+    def __init__(self, map_size):
 
-    # --- map RULE
-    # 0 = empty
-    # 1 = wall
-    # 2 = food
-    # 3 = snake head
-    # 4 = snake body
+        # create a main map for snake
+        self._main_map = self._create_map(map_size)
 
-    :return:
-     main_map array in numpy format
-     -1 if game finished
-    """
-    # TODO: write this func
-    pass
+        self._screen = None
+        self._screen_size = None
 
+        # game status flag.
+        # if == 1 => game still playable
+        # if == 0 => game is finished and snake dead
+        # if == -1 => game not begined yet
+        self._game_status_flag = -1
 
-def move_snake(direction):
-    """
-    get direction and move the head of snake
-    and report problem
-    :param direction:
-    'up' for up
-    'down' for down
-    'left' for left
-    'right' for right
-    :return:
-    'ok' => if no problem to move snake
-    'dead-wall' => if snake crash into wall
-    'dead-body' => if snake crash into the body
-    'dead-win' => if map is full
-    'dead' => snake died, but i can't( or don't want to) figure out
-    """
-    # TODO: write this func
-    pass
+        # Initialize the game engine
+        pygame.init()
+        pass
 
+    def __del__(self):
+        # close and showdown game engine
+        pygame.quit()
 
-def _update_movement():
-    # update movement of user into map and return result
-    # TODO: write this func
-    pass
+        pass
 
+    def req_main_map(self):
+        """
+        return main_map of game
 
-# Done
-def _show_map(new_map, screen_obj):
-    """
-    draw map
-    :param new_map:
-     main_map in numpy format
-    :return:
-    """
-    # TODO: this is working but this dude is too slow, fix this with metode blow
-    # you just need to re draw pixels changes
+        # --- map RULE
+        # 0 = empty
+        # 1 = wall
+        # 2 = food
+        # 3 = snake head
+        # 4 = snake body
 
-    i_i = 0
-    for i in new_map:
-        j_j = 0
-        for j in i:
+        :return:
+         main_map array in numpy format
+         -1 if game finished
+        """
+        # TODO: write this func
+        # cheack game not finished yet
 
-            color_of_rect = 0
-            if j == 0:
-                # set color_of_rect to black for blank space
-                color_of_rect = BLACK
-            elif j == 1:
-                # set color_of_rect to white for wall
-                color_of_rect = GRAY
-            elif j == 2:
-                # set color_of_rect to red for food
-                color_of_rect = RED
-            elif j == 3:
-                # set color_of_rect to blue for head of snake head
-                color_of_rect = BLUE
-            elif j == 4:
-                # set color_of_rect to light_blue for snake body
-                color_of_rect = LIGHT_BLUE
+        return self._main_map
 
-            # Draw a rectangle in i_i,j_j
+    def move_snake(self, direction):
+        """
+        get direction and move the head of snake
+        and report problem
+        :param direction:
+        'up' for up
+        'down' for down
+        'left' for left
+        'right' for right
+        :return:
+        'ok' => if no problem to move snake
+        'dead-wall' => if snake crash into wall
+        'dead-body' => if snake crash into the body
+        'dead-win' => if map is full
+        'dead' => snake died, but i can't( or don't want to) figure out
+        """
+        # TODO: write this func
+        pass
 
-            pygame.draw.rect(screen_obj, color_of_rect,
-                             [(i_i * 15), (j_j * 15), 13, 13], 0)
+    def start_game(self, screen_size=(800, 550)):
+        # change game status
+        self._game_status_flag = 1
 
-            j_j += 1
+        # Set the height and width of the screen
+        self._screen_size = screen_size
 
-        i_i += 1
+        # create a obj for screen
+        self._screen = pygame.display.set_mode(self._screen_size)
 
+        # set caption fow window
+        pygame.display.set_caption("Snake AI")
 
-def _create_snake(new_map, size=5):
-    """
-    create a random snake in the main_map
-    :param new_map:
-     main_map
-    :param size:
-    length of snake
-    min 2
-    max 20
-    :return:
-    0 if can add snake
-    """
-    black_houses = __black_house_list(new_map)
-    # choose a random dot in empty space of array
+        # var for Loop until the user clicks the close button.
+        done = False
 
-    # add tail
+        # define obj for frame rate
+        clock = pygame.time.Clock()
 
-    pass
+        # Loop as long as done == False
+        while not done:
 
+            for event in pygame.event.get():  # User did something
+                if event.type == pygame.QUIT:  # If user clicked close
+                    done = True  # Flag that we are done so we exit this loop
 
-# Done
-def __black_house_list(new_map):
-    """
-    return list of black house's
-    :param new_map:
-     main_map
-    :return:
-     list of black house in normal array
-    """
-    addr_black = []  # list of black house
-    i_i = 0
-    # find all black house
-    for i in new_map:
-        j_j = 0
-        for j in i:
-            if j == 0:
-                addr_black.append([i_i, j_j])
-            j_j += 1
-        i_i += 1
-    return addr_black
+            # --- Game logic should go here
 
+            # All drawing code happens after the for loop and but
+            # inside the main while not done loop.
 
-# Done
-def _add_food(new_map, n=1):
-    """
-    add n food in empty space of map
-    :param new_map:
-     main_map
-    :param n:
-     number of food
-     default = 1
-    :return:
-    0 if no problem
-    1 if no space for add any more food
-    """
-    black_house = __black_house_list(new_map)
+            # Clear the screen and set the screen background
+            self._screen.fill(WHITE)
 
-    if len(black_house) == 0:
-        return 1
+            # ------- DRAW CODE
+            self._show_map(self._main_map, self._screen)
+            # ------- FIN DRAW CODE
 
-    # pick n ta random house and put it into rand_list
-    rand_list = []
-    for k in range(n):
-        rand_dot = random.randint(0, len(black_house))
-        temp = black_house[rand_dot]
-        rand_list.append(temp)
-        del black_house[rand_dot]
+            # Go ahead and update the screen with what we've drawn.
+            # This MUST happen after all the other drawing commands.
+            pygame.display.flip()
 
-    for k in range(n):
-        temp = rand_list.pop()
-        new_map[temp[0], temp[1]] = 2
+            # This limits the while loop to a max of 60 times per second.
+            # Leave this out and we will use all CPU we can.
+            clock.tick(1)
 
-    return 0
+        pass
 
+    def _update_movement(self, ):
+        # update movement of user into map and return result
+        # TODO: write this func
+        pass
 
-# Done
-def _create_map(map_size=15):
-    """
-    create a (map_size x map_size) map
-    set wall and return it
+    # Done
+    def _show_map(self, new_map, screen_obj):
+        """
+        draw map
+        :param new_map:
+         main_map in numpy format
+        :return:
+        """
+        # TODO: this is working but this dude is too slow, fix this with metode blow
+        # you just need to re draw pixels changes
 
-    # --- map RULE
-    # 0 = empty
-    # 1 = wall
-    # 2 = food
-    # 3 = snake head
-    # 4 = snake body
+        i_i = 0
+        for i in new_map:
+            j_j = 0
+            for j in i:
 
-    :param map_size:
-    size of map(n x n)
-    :return:
-     matrix of map in numpy form
-    """
+                color_of_rect = 0
+                if j == 0:
+                    # set color_of_rect to black for blank space
+                    color_of_rect = BLACK
+                elif j == 1:
+                    # set color_of_rect to white for wall
+                    color_of_rect = GRAY
+                elif j == 2:
+                    # set color_of_rect to red for food
+                    color_of_rect = RED
+                elif j == 3:
+                    # set color_of_rect to blue for head of snake head
+                    color_of_rect = BLUE
+                elif j == 4:
+                    # set color_of_rect to light_blue for snake body
+                    color_of_rect = LIGHT_BLUE
 
-    # create a main map for snake
-    temp_main_map = np.zeros((map_size, map_size))
-    # create map wall
-    temp_main_map[0, 0:] = 1
-    temp_main_map[0:, 0] = 1
-    temp_main_map[map_size - 1, 0:] = 1
-    temp_main_map[0:, map_size - 1] = 1
+                # Draw a rectangle in i_i,j_j
 
-    return temp_main_map
+                pygame.draw.rect(screen_obj, color_of_rect,
+                                 [(i_i * 15), (j_j * 15), 13, 13], 0)
 
+                j_j += 1
 
-# create a main map for snake
-main_map = _create_map(10)
+            i_i += 1
 
-# game status flag.
-# if == True => game still playable
-# if == False => game is finished and snake dead
-_game_status_flag = True
+    def _create_snake(self, new_map, size=5):
+        """
+        create a random snake in the main_map
+        :param new_map:
+         main_map
+        :param size:
+        length of snake
+        min 2
+        max 20
+        :return:
+        0 => snake added
+        'NoSpace' => not enough space for create snake
+        """
+        black_houses = self.__black_house_list(new_map)
+        if black_houses <= size:
+            # NO space for create snake
+            return 'NoSpace'
+        # choose a random dot in empty space of array
 
-# Initialize the game engine
-pygame.init()
+        # add tail
 
-# Set the height and width of the screen
-size = (800, 550)
-screen = pygame.display.set_mode(size)
+        pass
 
-# set caption fow window
-pygame.display.set_caption("Snake AI")
+    # Done
+    def __black_house_list(self, new_map):
+        """
+        return list of black house's
+        :param new_map:
+         main_map
+        :return:
+         list of black house in normal array
+        """
+        addr_black = []  # list of black house
+        i_i = 0
+        # find all black house
+        for i in new_map:
+            j_j = 0
+            for j in i:
+                if j == 0:
+                    addr_black.append([i_i, j_j])
+                j_j += 1
+            i_i += 1
+        return addr_black
 
-# var for Loop until the user clicks the close button.
-done = False
+    # Done
+    def _add_food(self, new_map, n=1):
+        """
+        add n food in empty space of map
+        :param new_map:
+         main_map
+        :param n:
+         number of food
+         default = 1
+        :return:
+        0 if no problem
+        1 if no space for add any more food
+        """
+        black_house = self.__black_house_list(new_map)
 
-# define obj for frame rate
-clock = pygame.time.Clock()
+        if len(black_house) == 0:
+            return 1
 
-# Loop as long as done == False
-while not done:
+        # pick n ta random house and put it into rand_list
+        rand_list = []
+        for k in range(n):
+            rand_dot = random.randint(0, len(black_house))
+            temp = black_house[rand_dot]
+            rand_list.append(temp)
+            del black_house[rand_dot]
 
-    for event in pygame.event.get():  # User did something
-        if event.type == pygame.QUIT:  # If user clicked close
-            done = True  # Flag that we are done so we exit this loop
+        for k in range(n):
+            temp = rand_list.pop()
+            new_map[temp[0], temp[1]] = 2
 
-    # --- Game logic should go here
+        return 0
 
-    # All drawing code happens after the for loop and but
-    # inside the main while not done loop.
+    # Done
+    def _create_map(self, map_size=15):
+        """
+        create a (map_size x map_size) map
+        set wall and return it
 
-    # Clear the screen and set the screen background
-    screen.fill(WHITE)
+        # --- map RULE
+        # 0 = empty
+        # 1 = wall
+        # 2 = food
+        # 3 = snake head
+        # 4 = snake body
 
-    # ------- DRAW CODE
-    _show_map(main_map, screen)
-    # ------- FIN DRAW CODE
+        :param map_size:
+        size of map(n x n)
+        :return:
+         matrix of map in numpy form
+        """
 
-    # Go ahead and update the screen with what we've drawn.
-    # This MUST happen after all the other drawing commands.
-    pygame.display.flip()
+        # create a main map for snake
+        temp_main_map = np.zeros((map_size, map_size))
+        # create map wall
+        temp_main_map[0, 0:] = 1
+        temp_main_map[0:, 0] = 1
+        temp_main_map[map_size - 1, 0:] = 1
+        temp_main_map[0:, map_size - 1] = 1
 
-    # This limits the while loop to a max of 60 times per second.
-    # Leave this out and we will use all CPU we can.
-    clock.tick(1)
+        return temp_main_map
 
-# close and showdown game engine
-pygame.quit()
