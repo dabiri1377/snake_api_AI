@@ -1,6 +1,6 @@
 import time
 
-from main_api import SnakeGame
+from V1.main_api import SnakeGame
 
 test = SnakeGame(32)
 print("test0")

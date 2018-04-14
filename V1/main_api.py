@@ -1,11 +1,10 @@
 import numpy as np
 import random
-import time
 
 # Import a library of functions called 'Pygame'
 import pygame
 
-from STRING import *
+from V1.STRING import *
 
 
 class SnakeGame:
